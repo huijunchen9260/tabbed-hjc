@@ -5,7 +5,7 @@ The [suckless tabbed](https://tools.suckless.org/tabbed/) with some addition fun
 ## Unique functionality
 
 - `Super-Shift-.` to open terminal application embeded in tabbed
-- `Super-Shift-.` to open new terminal window with the chosen terminal's path
+- `Super-Shift-/` to open new terminal window with the chosen terminal's path
 
 ## Key bindings
 
