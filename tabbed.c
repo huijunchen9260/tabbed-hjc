@@ -49,7 +49,7 @@
 
 enum { ColFG, ColBG, ColLast };       /* color */
 enum { WMProtocols, WMDelete, WMName, WMState, WMFullscreen,
-       XEmbed, WMSelectTab, WMSelectApp, WMLast }; /* default atoms */
+       XEmbed, WMSelectTab, WMSelectApp, WMAttachWin, WMDetachWin, WMLast }; /* default atoms */
 
 typedef union {
 	int i;
@@ -1031,6 +1031,8 @@ setup(void)
 	wmatom[WMSelectTab] = XInternAtom(dpy, "_TABBED_SELECT_TAB", False);
 	wmatom[WMSelectApp] = XInternAtom(dpy, "_TABBED_SELECT_TERMAPP", False);
 	wmatom[WMSelectApp] = XInternAtom(dpy, "_TABBED_TERM", False);
+	wmatom[WMAttachWin] = XInternAtom(dpy, "_TABBED_ATTACH_WIN", False);
+	wmatom[WMDetachWin] = XInternAtom(dpy, "_TABBED_DETACH_WIN", False);
 	wmatom[WMState] = XInternAtom(dpy, "_NET_WM_STATE", False);
 	wmatom[XEmbed] = XInternAtom(dpy, "_XEMBED", False);
 

@@ -56,6 +56,27 @@ static Bool npisrelative  = True;
 	} \
 }
 
+#define ATTACHWIN(p) { \
+	.v = (char *[]){ "/bin/sh", "-c", \
+		"wmctrl -x -l |" \
+		"grep -E \" $(xprop -root -notype _NET_CURRENT_DESKTOP | cut -d ' ' -f 3) \" |" \
+		"grep -v tabbed | cut -d ' ' -f 1,4 | dmenu -i -l 5 -p \"Attach: \" |" \
+		"cut -d ' ' -f 1 | xargs -I {} xdotool windowreparent \"{}\" $1", \
+		p, winid, NULL \
+	} \
+}
+
+#define DETACHWIN(p) { \
+        .v = (char *[]){ "/bin/sh", "-c", \
+		"rootid=\"`xwininfo -root | grep \"Window id\" | cut -d ' ' -f 4`\" &&" \
+                "wid=\"`xwininfo -children -id $1 | grep '^     0x' |" \
+                "sed -e's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1 \\2@' |" \
+                "dmenu -i -l 10 -p 'Detach: ' | cut -d ' ' -f 1`\" &&" \
+		"xdotool windowreparent \"$wid\" \"$rootid\"", \
+                p, winid, NULL \
+        } \
+}
+
 
 #define MODKEY Mod4Mask
 static Key keys[] = {
@@ -72,6 +93,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_comma,    spawn,       SETPROP("_TABBED_SELECT_TAB") },
 	{ MODKEY|ShiftMask,    XK_period,   spawn,       OPENTERMSOFT("_TABBED_SELECT_TERMAPP") },
 	{ MODKEY|ShiftMask,    XK_slash,    spawn,       OPENTERM("_TABBED_TERM") },
+	{ MODKEY|ShiftMask,    XK_a,	    spawn,       ATTACHWIN("_TABBED_ATTACH_WIN") },
+	{ MODKEY|ShiftMask,    XK_d,	    spawn,       DETACHWIN("_TABBED_DETACH_WIN") },
 	{ ControlMask,         XK_1,        move,        { .i = 0 } },
 	{ ControlMask,         XK_2,        move,        { .i = 1 } },
 	{ ControlMask,         XK_3,        move,        { .i = 2 } },
