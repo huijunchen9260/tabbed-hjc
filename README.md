@@ -48,13 +48,14 @@ sudo make install
 
 ## Scripts
 
-- `tabbed-slime` to use [vim-slime](https://github.com/jpalardy/vim-slime) with tabbed.
-    - Move `tabbed-slime` to your `$PATH` and add the following code into your `~/.vimrc`:
-      ```vimL
-	let g:slime_target = "x11"
-	function SlimeOverrideConfig()
-	    let b:slime_config = {"window_id": ""}
-	    let b:slime_config["window_id"] = system("tabbed-slime")
-	endfunction
-      ```
+1. `tabbed-slime` to use [vim-slime](https://github.com/jpalardy/vim-slime) with tabbed.
+Move `tabbed-slime` to your `$PATH` and add the following code into your `~/.vimrc`:
+
+```vimL
+let g:slime_target = "x11"
+function SlimeOverrideConfig()
+    let b:slime_config = {"window_id": ""}
+    let b:slime_config["window_id"] = system("tabbed-slime")
+endfunction
+```
 
