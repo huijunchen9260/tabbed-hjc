@@ -1030,6 +1030,7 @@ setup(void)
 	wmatom[WMProtocols] = XInternAtom(dpy, "WM_PROTOCOLS", False);
 	wmatom[WMSelectTab] = XInternAtom(dpy, "_TABBED_SELECT_TAB", False);
 	wmatom[WMSelectApp] = XInternAtom(dpy, "_TABBED_SELECT_TERMAPP", False);
+	wmatom[WMSelectApp] = XInternAtom(dpy, "_TABBED_TERM", False);
 	wmatom[WMState] = XInternAtom(dpy, "_NET_WM_STATE", False);
 	wmatom[XEmbed] = XInternAtom(dpy, "_XEMBED", False);
 

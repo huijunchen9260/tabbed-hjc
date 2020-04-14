@@ -42,17 +42,20 @@ static Bool npisrelative  = True;
 	} \
 }
 
-/* #define OPENSOFT(p) { \ */
-/* 	.v = (char *[]){ "/bin/sh", "-c", \ */
-/* 		"software=$(dmenu_path | dmenu -i -p 'Softwares to run: ') && $software &", \ */
-/* 		"ps -ax | grep \"$software\" | grep -v grep | tail -n 1 | awk '{print $1}' |" \ */
-/* 		"xargs -I {} xdotool search --pid \"{}\" | head -n 1 |" \ */
-/* 		"xargs -I {} printf '0x%x' \"{}\" |" \ */
-/* 		"xargs -I {} xdotool windowreparent \"{}\" $1" \ */
-/* 		p, winid, NULL \ */
-/* 	} \ */
-/* } */
-		/* "xdotool search --pid $! | head -n 1 |" \ */
+#define OPENTERM(p) { \
+	.v = (char *[]){ "/bin/sh", "-c", \
+		"cd \"$(xwininfo -children -id $1 | grep '^     0x' |" \
+                "sed -e's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1 \\2@' |" \
+		"dmenu -i -l 10 -p 'New term path based on: ' |" \
+		"cut -f 1 | xargs -I {} xprop -id \"{}\" | grep _NET_WM_PID |" \
+		"cut -d ' ' -f 3 | xargs -I {} pstree -p \"{}\" |" \
+		"cut -d '(' -f 3 | cut -d ')' -f 1 |" \
+		"xargs -I {} readlink -e /proc/\"{}\"/cwd/)\" &&" \
+		"urxvt -embed $1", \
+		p, winid, NULL \
+	} \
+}
+
 
 #define MODKEY Mod4Mask
 static Key keys[] = {
@@ -68,7 +71,7 @@ static Key keys[] = {
 
 	{ MODKEY|ShiftMask,    XK_comma,    spawn,       SETPROP("_TABBED_SELECT_TAB") },
 	{ MODKEY|ShiftMask,    XK_period,   spawn,       OPENTERMSOFT("_TABBED_SELECT_TERMAPP") },
-	/* { MODKEY|ShiftMask,    XK_slash,    spawn,       OPENSOFT("_TABBED_SELECT_APP") }, */
+	{ MODKEY|ShiftMask,    XK_slash,    spawn,       OPENTERM("_TABBED_TERM") },
 	{ ControlMask,         XK_1,        move,        { .i = 0 } },
 	{ ControlMask,         XK_2,        move,        { .i = 1 } },
 	{ ControlMask,         XK_3,        move,        { .i = 2 } },
