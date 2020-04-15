@@ -33,17 +33,22 @@ static Bool npisrelative  = True;
         } \
 }
 
+/* Modify the following line to match your terminal and software list */
 #define OPENTERMSOFT(p) { \
 	.v = (char *[]){ "/bin/sh", "-c", \
-		"printf '%s\n' \"htop\" \"ncdu\" \"nvim\" \"fzf\" \"nnn\" \"ncmpcpp\" \"nmtui\" \"joplin\" |" \
+		"term='urxvt' && titlearg='-name' && embedarg='-embed' &&" \
+		"softlist=`printf '%s\n' \"htop\" \"ncdu\" \"nvim\" \"fzf\" \"nnn\" \"ncmpcpp\" \"nmtui\" \"joplin\"` &&" \
+		"printf '%s' \"$softlist\" |" \
 		"dmenu -i -p 'Softwares to run: ' |" \
-		"xargs -I {} urxvt -name \"{}\" -embed $1 -e \"{}\"", \
+		"xargs -I {} $term $titlearg \"{}\" $embedarg $1 -e \"{}\"", \
 		p, winid, NULL \
 	} \
 }
 
+/* Modify the following line to match your terminal*/
 #define OPENTERM(p) { \
 	.v = (char *[]){ "/bin/sh", "-c", \
+		"term='urxvt' && embedarg='-embed' &&" \
 		"cd \"$(xwininfo -children -id $1 | grep '^     0x' |" \
                 "sed -e's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1 \\2@' |" \
 		"dmenu -i -l 10 -p 'New term path based on: ' |" \
@@ -51,15 +56,15 @@ static Bool npisrelative  = True;
 		"cut -d ' ' -f 3 | xargs -I {} pstree -p \"{}\" |" \
 		"cut -d '(' -f 3 | cut -d ')' -f 1 |" \
 		"xargs -I {} readlink -e /proc/\"{}\"/cwd/)\" &&" \
-		"urxvt -embed $1", \
+		"$term $embedarg $1", \
 		p, winid, NULL \
 	} \
 }
 
 #define ATTACHWIN(p) { \
 	.v = (char *[]){ "/bin/sh", "-c", \
-		"wmctrl -x -l |" \
-		"grep -E \" $(xprop -root -notype _NET_CURRENT_DESKTOP | cut -d ' ' -f 3) \" |" \
+		"deskid=`xprop -root -notype _NET_CURRENT_DESKTOP | cut -d ' ' -f 3` &&" \
+		"wmctrl -x -l | grep -E \" $deskid \" |" \
 		"grep -v tabbed | cut -d ' ' -f 1,4 | dmenu -i -l 5 -p \"Attach: \" |" \
 		"cut -d ' ' -f 1 | xargs -I {} xdotool windowreparent \"{}\" $1", \
 		p, winid, NULL \
