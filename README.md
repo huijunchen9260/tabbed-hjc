@@ -50,7 +50,7 @@ sudo make install
 
 ## Scripts
 
-1. `tabbed-slime` to use [vim-slime](https://github.com/jpalardy/vim-slime) with tabbed.
+1. `tabbed-slime`: use [vim-slime](https://github.com/jpalardy/vim-slime) with tabbed.
 Move `tabbed-slime` to your `$PATH` and add the following code into your `~/.vimrc`:
 
 ```vimL
@@ -60,4 +60,6 @@ function SlimeOverrideConfig()
     let b:slime_config["window_id"] = system("tabbed-slime")
 endfunction
 ```
+
+2. `tabbedize`: make non-tabbed window tabbed.
 

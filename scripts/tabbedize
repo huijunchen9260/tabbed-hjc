@@ -1,0 +1,3 @@
+#!/bin/sh
+
+xprop -id $(xdotool getactivewindow) | grep tabbed || tabbed -d | xargs -I {} xdotool windowreparent $(xdotool getactivewindow) "{}"
