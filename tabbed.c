@@ -1031,6 +1031,7 @@ setup(void)
 	wmatom[WMSelectApp] = XInternAtom(dpy, "_TABBED_SELECT_TERMAPP", False);
 	wmatom[WMSelectApp] = XInternAtom(dpy, "_TABBED_TERM", False);
 	wmatom[WMAttachWin] = XInternAtom(dpy, "_TABBED_ATTACH_WIN", False);
+	wmatom[WMAttachWin] = XInternAtom(dpy, "_TABBED_ATTACH_TAB_WIN", False);
 	wmatom[WMDetachWin] = XInternAtom(dpy, "_TABBED_DETACH_WIN", False);
 	wmatom[WMState] = XInternAtom(dpy, "_NET_WM_STATE", False);
 	wmatom[XEmbed] = XInternAtom(dpy, "_XEMBED", False);

@@ -1,3 +1,5 @@
 #!/bin/sh
 
-xprop -id $(xdotool getactivewindow) | grep tabbed || tabbed -d | xargs -I {} xdotool windowreparent $(xdotool getactivewindow) "{}"
+# Dependency: xprop, xdotool
+
+xprop -id $(xdotool getactivewindow) | grep 'WM_CLASS(STRING) = "tabbed"' || tabbed -c -d | xargs -I {} xdotool windowreparent $(xdotool getactivewindow) "{}"

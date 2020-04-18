@@ -25,9 +25,9 @@ static Bool npisrelative  = True;
 
 #define SETPROP(p) { \
         .v = (char *[]){ "/bin/sh", "-c", \
-                "prop=\"`xwininfo -children -id $1 | grep '^     0x' |" \
+                "prop=\"$(xwininfo -children -id $1 | grep '^     0x' |" \
                 "sed -e's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1 \\2@' |" \
-                "tail -n +2 | dmenu -i -l 10 -p 'Switch to: '`\" &&" \
+                "tail -n +2 | dmenu -i -l 10 -p 'Switch to: ')\" &&" \
                 "xprop -id $1 -f $0 8s -set $0 \"$prop\"", \
                 p, winid, NULL \
         } \
@@ -37,7 +37,7 @@ static Bool npisrelative  = True;
 #define OPENTERMSOFT(p) { \
 	.v = (char *[]){ "/bin/sh", "-c", \
 		"term='urxvt' && titlearg='-name' && embedarg='-embed' &&" \
-		"softlist=`printf '%s\n' \"htop\" \"ncdu\" \"nvim\" \"fzf\" \"nnn\" \"ncmpcpp\" \"nmtui\" \"joplin\"` &&" \
+		"softlist=$(printf '%s\n' \"htop\" \"ncdu\" \"nvim\" \"fzf\" \"nnn\" \"ncmpcpp\" \"nmtui\" \"joplin\") &&" \
 		"printf '%s' \"$softlist\" |" \
 		"dmenu -i -p 'Softwares to run: ' |" \
 		"xargs -I {} $term $titlearg \"{}\" $embedarg $1 -e \"{}\"", \
@@ -63,7 +63,7 @@ static Bool npisrelative  = True;
 
 #define ATTACHWIN(p) { \
 	.v = (char *[]){ "/bin/sh", "-c", \
-		"deskid=`xprop -root -notype _NET_CURRENT_DESKTOP | cut -d ' ' -f 3` &&" \
+		"deskid=$(xprop -root -notype _NET_CURRENT_DESKTOP | cut -d ' ' -f 3) &&" \
 		"wmctrl -x -l | grep -E \" $deskid \" |" \
 		"grep -v tabbed | cut -d ' ' -f 1,4 | dmenu -i -l 5 -p \"Attach: \" |" \
 		"cut -d ' ' -f 1 | xargs -I {} xdotool windowreparent \"{}\" $1", \
@@ -71,13 +71,29 @@ static Bool npisrelative  = True;
 	} \
 }
 
+
+#define ATTACHTABWIN(p) { \
+	.v = (char *[]){ "/bin/sh", "-c", \
+		"deskid=$(xprop -root -notype _NET_CURRENT_DESKTOP | cut -d ' ' -f 3) &&" \
+		"rootid=\"$(xwininfo -root | grep \"Window id\" | cut -d ' ' -f 4)\" &&" \
+		"wid=\"$(wmctrl -x -l | grep -E \" $deskid \" |" \
+		"grep tabbed | grep -v $(printf '0x0%x' \"$1\") |" \
+		"cut -d ' ' -f 1,4 | dmenu -i -l 5 -p \"Attach tabbed window: \" |" \
+		"cut -d ' ' -f 1 | xargs -I {} xwininfo -children -id \"{}\" | grep '^     0x' |" \
+                "sed -e's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1@')\" &&" \
+		"for id in $(printf '%s' \"$wid\"); do xdotool windowreparent \"$id\" \"$1\"; done", \
+		p, winid, NULL \
+	} \
+}
+
 #define DETACHWIN(p) { \
         .v = (char *[]){ "/bin/sh", "-c", \
-		"rootid=\"`xwininfo -root | grep \"Window id\" | cut -d ' ' -f 4`\" &&" \
-                "wid=\"`xwininfo -children -id $1 | grep '^     0x' |" \
-                "sed -e's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1 \\2@' |" \
-                "dmenu -i -l 10 -p 'Detach: ' | cut -d ' ' -f 1`\" &&" \
-		"xdotool windowreparent \"$wid\" \"$rootid\"", \
+		"rootid=\"$(xwininfo -root | grep \"Window id\" | cut -d ' ' -f 4)\" &&" \
+                "wid=\"$(xwininfo -children -id $1 | grep '^     0x' |" \
+                "sed -e 's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1 \\2@' |" \
+                "dmenu -i -l 5 -p 'Detach: ' | cut -d ' ' -f 1)\" &&" \
+		"xdotool windowreparent \"$wid\" \"$rootid\" &&" \
+		"xdotool windowactivate $1", \
                 p, winid, NULL \
         } \
 }
@@ -93,12 +109,13 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_j,        rotate,      { .i = -1 } },
 	{ MODKEY|ShiftMask,    XK_h,        movetab,     { .i = -1 } },
 	{ MODKEY|ShiftMask,    XK_l,        movetab,     { .i = +1 } },
-	{ ShiftMask,           XK_Tab,      rotate,      { .i = 0 } },
+	{ ControlMask,         XK_Tab,      rotate,      { .i = 0 } },
 
 	{ MODKEY|ShiftMask,    XK_comma,    spawn,       SETPROP("_TABBED_SELECT_TAB") },
 	{ MODKEY|ShiftMask,    XK_period,   spawn,       OPENTERMSOFT("_TABBED_SELECT_TERMAPP") },
 	{ MODKEY|ShiftMask,    XK_slash,    spawn,       OPENTERM("_TABBED_TERM") },
 	{ MODKEY|ShiftMask,    XK_a,	    spawn,       ATTACHWIN("_TABBED_ATTACH_WIN") },
+	{ MODKEY|ShiftMask,    XK_o,	    spawn,       ATTACHTABWIN("_TABBED_ATTACH_TAB_WIN") },
 	{ MODKEY|ShiftMask,    XK_d,	    spawn,       DETACHWIN("_TABBED_DETACH_WIN") },
 	{ ControlMask,         XK_1,        move,        { .i = 0 } },
 	{ ControlMask,         XK_2,        move,        { .i = 1 } },
@@ -120,6 +137,7 @@ static Key keys[] = {
 
 	{ MODKEY,              XK_Shift_L,  showbar,     { .i = 1 } },
 	{ ShiftMask,           XK_Super_L,  showbar,     { .i = 1 } },
+	{ ControlMask,         XK_comma,    showbar,     { .i = 1 } },
 };
 
 static Key keyreleases[] = {
