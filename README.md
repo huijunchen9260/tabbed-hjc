@@ -7,7 +7,7 @@ The [suckless tabbed](https://tools.suckless.org/tabbed/) with some addition fun
 - `Super-Shift-.` to open terminal application embeded in tabbed
 - `Super-Shift-/` to open new terminal window with the chosen terminal's path
 - `Super-Shift-a` to attach windows (not another tabbed window) from current workplace. Require `wmctrl`.
-- `Super-Shift-a` to attach tabbed windows from current workplace. Require `wmctrl`.
+- `Super-Shift-o` to attach tabbed windows from current workplace. Require `wmctrl`.
 - `Super-Shift-d` to detach child windows from current tabbed window.
 
 ## Key bindings
