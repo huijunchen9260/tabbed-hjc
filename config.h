@@ -56,7 +56,7 @@ static Bool npisrelative  = True;
 		"cut -d ' ' -f 3 | xargs -I {} pstree -p \"{}\" |" \
 		"cut -d '(' -f 3 | cut -d ')' -f 1 |" \
 		"xargs -I {} readlink -e /proc/\"{}\"/cwd/)\" &&" \
-		"$term $embedarg $1", \
+		"$term -embed $1", \
 		p, winid, NULL \
 	} \
 }
@@ -81,10 +81,13 @@ static Bool npisrelative  = True;
 		"cut -d ' ' -f 1,4 | dmenu -i -l 5 -p \"Attach tabbed window: \" |" \
 		"cut -d ' ' -f 1 | xargs -I {} xwininfo -children -id \"{}\" | grep '^     0x' |" \
                 "sed -e's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1@')\" &&" \
+		"for id in $(printf '%s' \"$wid\"); do xdotool windowreparent \"$id\" \"$rootid\"; done &&" \
 		"for id in $(printf '%s' \"$wid\"); do xdotool windowreparent \"$id\" \"$1\"; done", \
 		p, winid, NULL \
 	} \
 }
+
+/* xprop -id \"$id\" -remove WM_COMMAND */
 
 #define DETACHWIN(p) { \
         .v = (char *[]){ "/bin/sh", "-c", \
@@ -138,10 +141,11 @@ static Key keys[] = {
 	{ MODKEY,              XK_Shift_L,  showbar,     { .i = 1 } },
 	{ ShiftMask,           XK_Super_L,  showbar,     { .i = 1 } },
 	{ ControlMask,         XK_comma,    showbar,     { .i = 1 } },
+	{ ControlMask,         XK_period,    showbar,     { .i = 0 } },
 };
 
 static Key keyreleases[] = {
 	/* modifier            key          function     argument */
-	{ MODKEY|ShiftMask,    XK_Shift_L,  showbar,     { .i = 0 } },
-	{ MODKEY|ShiftMask,    XK_Super_L,  showbar,     { .i = 0 } },
+	{ MODKEY|ShiftMask,    XK_Shift_L,  showbar,     { .i = 1 } },
+	{ MODKEY|ShiftMask,    XK_Super_L,  showbar,     { .i = 1 } },
 };
