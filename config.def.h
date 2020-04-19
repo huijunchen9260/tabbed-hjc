@@ -61,28 +61,47 @@ static Bool npisrelative  = True;
 	} \
 }
 
+/* deskid: id for current workspace */
+/* rootid: id for root window */
+/* window: data for chosen window by dmenu */
+/* wid: chosen window's window id */
+/* wname: chosen window's name */
+/* cwid: chosen window's child window id (tabbed window only) */
 #define ATTACHWIN(p) { \
 	.v = (char *[]){ "/bin/sh", "-c", \
 		"deskid=$(xprop -root -notype _NET_CURRENT_DESKTOP | cut -d ' ' -f 3) &&" \
-		"wmctrl -x -l | grep -E \" $deskid \" |" \
-		"grep -v tabbed | cut -d ' ' -f 1,4 | dmenu -i -l 5 -p \"Attach: \" |" \
-		"cut -d ' ' -f 1 | xargs -I {} xdotool windowreparent \"{}\" $1", \
+		"rootid=\"$(xwininfo -root | grep \"Window id\" | cut -d ' ' -f 4)\" &&" \
+		"window=\"$(wmctrl -x -l | grep -E \" $deskid \" |" \
+		"grep -v $(printf '0x0%x' \"$1\") |" \
+		"cut -d ' ' -f 1,4 | dmenu -i -l 5 -p \"Attach: \")\" &&" \
+		"wid=$(printf '%s' \"$window\" | cut -d ' ' -f 1) &&" \
+		"wname=$(printf '%s' \"$window\" | cut -d ' ' -f 2) &&" \
+		"[ \"$wname\" = \"tabbed.tabbed\" ] &&" \
+		"cwid=$(xwininfo -children -id \"$wid\" | grep '^     0x' |" \
+                "sed -e 's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1@') &&" \
+		"for id in $(printf '%s' \"$cwid\"); do xdotool windowreparent \"$id\" \"$rootid\"; done &&" \
+		"for id in $(printf '%s' \"$cwid\"); do xdotool windowreparent \"$id\" \"$1\"; done ||" \
+		"xdotool windowreparent \"$wid\" $1", \
 		p, winid, NULL \
 	} \
 }
 
-
-#define ATTACHTABWIN(p) { \
+#define ATTACHALL(p) { \
 	.v = (char *[]){ "/bin/sh", "-c", \
 		"deskid=$(xprop -root -notype _NET_CURRENT_DESKTOP | cut -d ' ' -f 3) &&" \
 		"rootid=\"$(xwininfo -root | grep \"Window id\" | cut -d ' ' -f 4)\" &&" \
-		"wid=\"$(wmctrl -x -l | grep -E \" $deskid \" |" \
-		"grep tabbed | grep -v $(printf '0x0%x' \"$1\") |" \
-		"cut -d ' ' -f 1,4 | dmenu -i -l 5 -p \"Attach tabbed window: \" |" \
-		"cut -d ' ' -f 1 | xargs -I {} xwininfo -children -id \"{}\" | grep '^     0x' |" \
-                "sed -e's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1@')\" &&" \
-		"for id in $(printf '%s' \"$wid\"); do xdotool windowreparent \"$id\" \"$rootid\"; done &&" \
-		"for id in $(printf '%s' \"$wid\"); do xdotool windowreparent \"$id\" \"$1\"; done", \
+		"window=\"$(wmctrl -x -l | grep -E \" $deskid \" |" \
+		"grep -v $(printf '0x0%x' \"$1\") | cut -d ' ' -f 1,4)\" &&" \
+		"IFS=':' &&" \
+		"for win in $(printf '%s' \"$window\" | tr '\n' ':'); do unset IFS &&" \
+		    "wid=$(printf '%s' \"$win\" | cut -d ' ' -f 1) &&" \
+		    "wname=$(printf '%s' \"$win\" | cut -d ' ' -f 2) &&" \
+		    "[ \"$wname\" = \"tabbed.tabbed\" ] &&" \
+		    "cwid=$(xwininfo -children -id \"$wid\" | grep '^     0x' |" \
+		    "sed -e 's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1@') &&" \
+		    "for id in $(printf '%s' \"$cwid\"); do xdotool windowreparent \"$id\" \"$rootid\"; done &&" \
+		    "for id in $(printf '%s' \"$cwid\"); do xdotool windowreparent \"$id\" \"$1\"; done ||" \
+		"xdotool windowreparent \"$wid\" $1; done", \
 		p, winid, NULL \
 	} \
 }
@@ -100,6 +119,18 @@ static Bool npisrelative  = True;
 }
 
 
+#define DETACHALL(p) { \
+        .v = (char *[]){ "/bin/sh", "-c", \
+		"rootid=\"$(xwininfo -root | grep \"Window id\" | cut -d ' ' -f 4)\" &&" \
+                "wid=\"$(xwininfo -children -id $1 | grep '^     0x' |" \
+                "sed -e 's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1@')\" &&" \
+		"IFS=':' &&" \
+		"for id in $(printf '%s' \"$wid\" | tr '\n' ':'); do unset IFS &&" \
+		"xdotool windowreparent \"$id\" \"$rootid\"; done", \
+                p, winid, NULL \
+        } \
+}
+
 #define MODKEY Mod4Mask
 static Key keys[] = {
 	/* modifier            key          function     argument */
@@ -116,8 +147,9 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_period,   spawn,       OPENTERMSOFT("_TABBED_SELECT_TERMAPP") },
 	{ MODKEY|ShiftMask,    XK_slash,    spawn,       OPENTERM("_TABBED_TERM") },
 	{ MODKEY|ShiftMask,    XK_a,	    spawn,       ATTACHWIN("_TABBED_ATTACH_WIN") },
-	{ MODKEY|ShiftMask,    XK_o,	    spawn,       ATTACHTABWIN("_TABBED_ATTACH_TAB_WIN") },
+	{ MODKEY|ShiftMask,    XK_equal,    spawn,       ATTACHALL("_TABBED_ATTACH_ALL") },
 	{ MODKEY|ShiftMask,    XK_d,	    spawn,       DETACHWIN("_TABBED_DETACH_WIN") },
+	{ MODKEY|ShiftMask,    XK_minus,    spawn,       DETACHALL("_TABBED_DETACH_ALL") },
 	{ ControlMask,         XK_1,        move,        { .i = 0 } },
 	{ ControlMask,         XK_2,        move,        { .i = 1 } },
 	{ ControlMask,         XK_3,        move,        { .i = 2 } },

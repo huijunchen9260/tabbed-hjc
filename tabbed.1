@@ -117,17 +117,36 @@ show tabs
 open new tab
 .TP
 .B Super\-Shift\-a
-attach windows (not another tabbed window) in current workspace. Require
+attach window in current workspace. Require
 .BR wmctrl
-to list windows in current workspace.
+to list windows in current workspace. Make sure you use
+.B -c
+argument for tabbed, i.e.,
+.B tabbed -c software -embedarg
+for every software.
 .TP
-.B Super\-Shift\-o
-attach tabbed windows in current workspace. Require
+.B Super\-Shift\-plus
+attach all windows in current workspace. Require
 .BR wmctrl
-to list windows in current workspace.
+to list windows in current workspace. Make sure you use
+.B -c
+argument for tabbed, i.e.,
+.B tabbed -c software -embedarg
+for every software.
 .TP
 .B Super\-Shift\-d
-detach child windows from current tabbed window.
+detach child window from current tabbed window. Make sure you use
+.B -c
+argument for tabbed, i.e.,
+.B tabbed -c software -embedarg
+for every software.
+.TP
+.B Super\-Shift\-minus
+detach all child windows from current tabbed window. Make sure you use
+.B -c
+argument for tabbed, i.e.,
+.B tabbed -c software -embedarg
+for every software.
 .TP
 .B Super\-Shift\-j
 previous tab
