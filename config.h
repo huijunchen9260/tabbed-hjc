@@ -56,7 +56,7 @@ static Bool npisrelative  = True;
 		"cut -d ' ' -f 3 | xargs -I {} pstree -p \"{}\" |" \
 		"cut -d '(' -f 3 | cut -d ')' -f 1 |" \
 		"xargs -I {} readlink -e /proc/\"{}\"/cwd/)\" &&" \
-		"$term -embed $1", \
+		"$term $embedarg $1", \
 		p, winid, NULL \
 	} \
 }
@@ -86,8 +86,6 @@ static Bool npisrelative  = True;
 		p, winid, NULL \
 	} \
 }
-
-/* xprop -id \"$id\" -remove WM_COMMAND */
 
 #define DETACHWIN(p) { \
         .v = (char *[]){ "/bin/sh", "-c", \
@@ -141,11 +139,10 @@ static Key keys[] = {
 	{ MODKEY,              XK_Shift_L,  showbar,     { .i = 1 } },
 	{ ShiftMask,           XK_Super_L,  showbar,     { .i = 1 } },
 	{ ControlMask,         XK_comma,    showbar,     { .i = 1 } },
-	{ ControlMask,         XK_period,    showbar,     { .i = 0 } },
 };
 
 static Key keyreleases[] = {
 	/* modifier            key          function     argument */
-	{ MODKEY|ShiftMask,    XK_Shift_L,  showbar,     { .i = 1 } },
-	{ MODKEY|ShiftMask,    XK_Super_L,  showbar,     { .i = 1 } },
+	{ MODKEY|ShiftMask,    XK_Shift_L,  showbar,     { .i = 0 } },
+	{ MODKEY|ShiftMask,    XK_Super_L,  showbar,     { .i = 0 } },
 };
