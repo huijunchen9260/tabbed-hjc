@@ -2,14 +2,32 @@
 
 The [suckless tabbed](https://tools.suckless.org/tabbed/) with some addition functionality based on dmenu
 
+
+<!-- vim-markdown-toc GFM -->
+
+* [Unique functionality](#unique-functionality)
+* [Key bindings](#key-bindings)
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Patches applied](#patches-applied)
+* [Scripts](#scripts)
+* [Configuration](#configuration)
+	* [Rofi compatibility](#rofi-compatibility)
+* [My Workflow](#my-workflow)
+
+<!-- vim-markdown-toc -->
+
 ## Unique functionality
 
-- `Super-Shift-.` to open terminal application embeded in tabbed
-- `Super-Shift-/` to open new terminal window with the chosen terminal's path
-- `Super-Shift-a` to attach window from current workplace. Require `wmctrl`, and should use `-c` argument, i.e., `tabbed -c software -embedarg`.
-- `Super-Shift-=` to automatically attach all windows from current workplace. Require `wmctrl`, and should use `-c` argument, i.e., `tabbed -c software -embedarg`.
-- `Super-Shift-d` to detach child window from current tabbed window. Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
-- `Super-Shift--` to automatically detach all child windows from current tabbed window. Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+- `Super-Shift-.` to *open terminal application* embeded in tabbed
+- `Super-Shift-/` to open new terminal window with the *chosen terminal's path*
+- `Super-Shift-a` to *attach window* from current workplace. Require `wmctrl`, and should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+- `Super-Shift-equal` to *automatically attach all windows* from current workplace. Require `wmctrl`, and should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+- `Super-Shift-d` to *detach child window* from current tabbed window. Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+- `Super-Shift-minus` to *automatically detach all child windows* from current tabbed window. Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+- `Super-Shift-[` to *hide current tab* in current tabbed window.
+- `Super-Shift-]` to *show hidden tab* in current tabbed window by dmenu prompt.
+- `Super-Shift-\` to *show all hidden tabs* in current tabbed window.
 
 ## Key bindings
 
@@ -32,7 +50,7 @@ The [suckless tabbed](https://tools.suckless.org/tabbed/) with some addition fun
 
 - Xlib header files to build tabbed
 - [dmenu](https://tools.suckless.org/dmenu/) to show prompt
-- `cut`, `xargs`, `grep`, `pstree`, `sed`, `wmctrl`, `xprop`, `xwininfo`
+- `cut`, `xargs`, `grep`, `pstree`, `sed`, `wmctrl`, `xdotool`, `xprop`, `xwininfo`
 
 ## Installation
 
@@ -63,5 +81,14 @@ function SlimeOverrideConfig()
 endfunction
 ```
 
-2. `tabbedize`: make non-tabbed window tabbed.
+2. `tabbedize`: make non-tabbed window tabbed. 
 
+
+## Configuration
+
+### Rofi compatibility
+
+`tabbed-hjc` use `dmenu` by default. If you want to use `rofi`, you can modify `config.def.h` (or `config.h`) by either
+
+1. Replacing `dmenu` to `rofi`, with the corresponding arguments. The arguments I use for dmenu is `-i` for case insensitivity, `-l` for vertical prompt, and `-p` for prompt name.
+2. Simply replacing `dmenu` as `rofi -dmenu`, and leave all the other arguments as it.

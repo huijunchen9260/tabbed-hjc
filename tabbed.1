@@ -148,6 +148,39 @@ argument for tabbed, i.e.,
 .B tabbed -c software -embedarg
 for every software.
 .TP
+.B Super\-Shift\-[
+hide current tab in current tabbed window.
+.B DETACHALL
+will kill current tabbed, and thus hidden tabs will lost.
+.TP
+.B Super\-Shift\-]
+show hidden tab in current tabbed window by dmenu prompt.
+.B DETACHALL
+will kill current tabbed, and thus hidden tabs will lost.
+.TP
+.B Super\-Shift\-backslash
+show all hidden tabs in current tabbed window.
+.B DETACHALL
+will kill current tabbed, and thus hidden tabs will lost.
+.TP
+.B Super\-Shift\-,
+open dmenu to either create a new tab appending the entered string or select
+an already existing tab.
+.TP
+.B Super\-Shift\-.
+open dmenu to open terminal software. Modify function
+.BR OPENTERMSOFT
+in
+.BR config.h
+to fit your software and terminal
+.TP
+.B Super\-Shift\-slash
+open new terminal with $PWD based on existing tabs. Modify function
+.BR OPENTERM
+in
+.BR config.h
+to fit your terminal
+.TP
 .B Super\-Shift\-j
 previous tab
 .TP
@@ -163,26 +196,8 @@ move selected tab one to the right
 .B Super\-Shift\-u
 toggle autofocus of urgent tabs
 .TP
-.B Shift\-Tab
+.B Control\-Tab
 toggle between the selected and last selected tab
-.TP
-.B Super\-Shift\-,
-open dmenu to either create a new tab appending the entered string or select
-an already existing tab.
-.TP
-.B Super\-Shift\-.
-open dmenu to open terminal software. Modify function
-.BR OPENTERMSOFT
-in
-.BR config.h
-to fit your software and terminal
-.TP
-.B Super\-Shift\-/
-open dmenu to open terminal based on existing tabs. Modify function
-.BR OPENTERM
-in
-.BR config.h
-to fit your terminal
 .TP
 .B Ctrl\-q
 close tab
