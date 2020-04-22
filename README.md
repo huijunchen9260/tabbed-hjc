@@ -13,21 +13,20 @@ The [suckless tabbed](https://tools.suckless.org/tabbed/) with some addition fun
 * [Scripts](#scripts)
 * [Configuration](#configuration)
 	* [Rofi compatibility](#rofi-compatibility)
-* [My Workflow](#my-workflow)
 
 <!-- vim-markdown-toc -->
 
 ## Unique functionality
 
-- `Super-Shift-.` to *open terminal application* embeded in tabbed
-- `Super-Shift-/` to open new terminal window with the *chosen terminal's path*
-- `Super-Shift-a` to *attach window* from current workplace. Require `wmctrl`, and should use `-c` argument, i.e., `tabbed -c software -embedarg`.
-- `Super-Shift-equal` to *automatically attach all windows* from current workplace. Require `wmctrl`, and should use `-c` argument, i.e., `tabbed -c software -embedarg`.
-- `Super-Shift-d` to *detach child window* from current tabbed window. Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
-- `Super-Shift-minus` to *automatically detach all child windows* from current tabbed window. Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
-- `Super-Shift-[` to *hide current tab* in current tabbed window.
-- `Super-Shift-]` to *show hidden tab* in current tabbed window by dmenu prompt.
-- `Super-Shift-\` to *show all hidden tabs* in current tabbed window.
+- `Super-Shift-.` to **open terminal application** embeded in tabbed
+- `Super-Shift-/` to open new terminal window with the **chosen terminal's path**
+- `Super-Shift-a` to **attach window** from current workplace. Require `wmctrl`, and should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+- `Super-Shift-equal` to **automatically attach all windows** from current workplace. Require `wmctrl`, and should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+- `Super-Shift-d` to **detach child window** from current tabbed window. Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+- `Super-Shift-minus` to **automatically detach all child windows** from current tabbed window. Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+- `Super-Shift-[` to **hide current tab** in current tabbed window.
+- `Super-Shift-]` to **show hidden tab** in current tabbed window by dmenu prompt.
+- `Super-Shift-\` to **show all hidden tabs** in current tabbed window.
 
 ## Key bindings
 
@@ -81,7 +80,7 @@ function SlimeOverrideConfig()
 endfunction
 ```
 
-2. `tabbedize`: make non-tabbed window tabbed. 
+2. `tabbedize`: make non-tabbed window tabbed.
 
 
 ## Configuration
