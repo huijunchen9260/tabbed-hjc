@@ -45,6 +45,7 @@ static Bool npisrelative  = True;
 	} \
 }
 
+
 /* Modify the following line to match your terminal*/
 #define OPENTERM(p) { \
 	.v = (char *[]){ "/bin/sh", "-c", \
@@ -69,7 +70,7 @@ static Bool npisrelative  = True;
 /* cwid: chosen window's child window id (tabbed window only) */
 #define ATTACHWIN(p) { \
 	.v = (char *[]){ "/bin/sh", "-c", \
-		"deskid=$(xprop -root -notype _NET_CURRENT_DESKTOP | cut -d ' ' -f 3) &&" \
+		"deskid=$(xdotool get_desktop) &&" \
 		"rootid=\"$(xwininfo -root | grep \"Window id\" | cut -d ' ' -f 4)\" &&" \
 		"window=\"$(wmctrl -x -l | grep -E \" $deskid \" |" \
 		"grep -v $(printf '0x0%x' \"$1\") |" \
@@ -88,7 +89,7 @@ static Bool npisrelative  = True;
 
 #define ATTACHALL(p) { \
 	.v = (char *[]){ "/bin/sh", "-c", \
-		"deskid=$(xprop -root -notype _NET_CURRENT_DESKTOP | cut -d ' ' -f 3) &&" \
+		"deskid=$(xdotool get_desktop) &&" \
 		"rootid=\"$(xwininfo -root | grep \"Window id\" | cut -d ' ' -f 4)\" &&" \
 		"window=\"$(wmctrl -x -l | grep -E \" $deskid \" |" \
 		"grep -v $(printf '0x0%x' \"$1\") | cut -d ' ' -f 1,4)\" &&" \
@@ -105,6 +106,7 @@ static Bool npisrelative  = True;
 		p, winid, NULL \
 	} \
 }
+
 
 #define DETACHWIN(p) { \
         .v = (char *[]){ "/bin/sh", "-c", \
@@ -199,18 +201,19 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_l,            movetab,     { .i = +1 } },
 	{ ControlMask,         XK_Tab,          rotate,      { .i = 0 } },
 
-	{ ControlMask,         XK_1,            move,        { .i = 0 } },
-	{ ControlMask,         XK_2,            move,        { .i = 1 } },
-	{ ControlMask,         XK_3,            move,        { .i = 2 } },
-	{ ControlMask,         XK_4,            move,        { .i = 3 } },
-	{ ControlMask,         XK_5,            move,        { .i = 4 } },
-	{ ControlMask,         XK_6,            move,        { .i = 5 } },
-	{ ControlMask,         XK_7,            move,        { .i = 6 } },
-	{ ControlMask,         XK_8,            move,        { .i = 7 } },
-	{ ControlMask,         XK_9,            move,        { .i = 8 } },
-	{ ControlMask,         XK_0,            move,        { .i = 9 } },
+	{ MODKEY|ShiftMask,    XK_1,            move,        { .i = 0 } },
+	{ MODKEY|ShiftMask,    XK_2,            move,        { .i = 1 } },
+	{ MODKEY|ShiftMask,    XK_3,            move,        { .i = 2 } },
+	{ MODKEY|ShiftMask,    XK_4,            move,        { .i = 3 } },
+	{ MODKEY|ShiftMask,    XK_5,            move,        { .i = 4 } },
+	{ MODKEY|ShiftMask,    XK_6,            move,        { .i = 5 } },
+	{ MODKEY|ShiftMask,    XK_7,            move,        { .i = 6 } },
+	{ MODKEY|ShiftMask,    XK_8,            move,        { .i = 7 } },
+	{ MODKEY|ShiftMask,    XK_9,            move,        { .i = 8 } },
+	{ MODKEY|ShiftMask,    XK_0,            move,        { .i = 9 } },
 
-	{ ControlMask,	       XK_q,            killclient,  { 0 } },
+	/* { ControlMask,         XK_q,            killclient,  { 0 } }, */
+	{ MODKEY|ShiftMask,    XK_q,            killclient,  { 0 } },
 
 	{ MODKEY,              XK_u,            focusurgent, { 0 } },
 	{ MODKEY|ShiftMask,    XK_u,            toggle,      { .v = (void*) &urgentswitch } },
