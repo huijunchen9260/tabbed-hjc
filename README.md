@@ -41,7 +41,7 @@ A missing tab layout for any windows manager / desktop environment
 - `Ctrl-u` to focus next urgent tab
 - `Super-Shift-[0..9]` to jumps to nth tab
 
-## [Requirements](Requirements)
+## Requirements
 
 - Xlib header files to build tabbed
 - [dmenu](https://tools.suckless.org/dmenu/) to show prompt
