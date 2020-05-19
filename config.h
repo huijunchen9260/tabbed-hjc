@@ -87,6 +87,21 @@ static Bool npisrelative  = True;
 	} \
 }
 
+#define ATTACHSELECTWIN(p) { \
+	.v = (char *[]){ "/bin/sh", "-c", \
+		"rootid=\"$(xwininfo -root | grep \"Window id\" | cut -d ' ' -f 4)\" &&" \
+		"wid=$(xdotool selectwindow) &&" \
+		"wname=$(xwininfo -id \"$wid\" | grep 'Window id:' | cut -d ' ' -f 5-) &&" \
+		"[ \"$wname\" = \"(has no name)\" ] &&" \
+		"cwid=$(xwininfo -children -id \"$wid\" | grep '^     0x' |" \
+                "sed -e 's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1@') &&" \
+		"for id in $(printf '%s' \"$cwid\"); do xdotool windowreparent \"$id\" \"$rootid\"; done &&" \
+		"for id in $(printf '%s' \"$cwid\"); do xdotool windowreparent \"$id\" \"$1\"; done ||" \
+		"xdotool windowreparent \"$wid\" $1", \
+		p, winid, NULL \
+	} \
+}
+
 #define ATTACHALL(p) { \
 	.v = (char *[]){ "/bin/sh", "-c", \
 		"deskid=$(xdotool get_desktop) &&" \
@@ -225,6 +240,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_period,       spawn,       OPENTERMSOFT("_TABBED_SELECT_TERMAPP") },
 	{ MODKEY|ShiftMask,    XK_slash,        spawn,       OPENTERM("_TABBED_TERM") },
 	{ MODKEY|ShiftMask,    XK_a,	        spawn,       ATTACHWIN("_TABBED_ATTACH_WIN") },
+	{ MODKEY|ShiftMask,    XK_s,	        spawn,       ATTACHSELECTWIN("_TABBED_ATTACH_WIN") },
 	{ MODKEY|ShiftMask,    XK_equal,        spawn,       ATTACHALL("_TABBED_ATTACH_ALL") },
 	{ MODKEY|ShiftMask,    XK_d,	        spawn,       DETACHWIN("_TABBED_DETACH_WIN") },
 	{ MODKEY|ShiftMask,    XK_minus,        spawn,       DETACHALL("_TABBED_DETACH_ALL") },
