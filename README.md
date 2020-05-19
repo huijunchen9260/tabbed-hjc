@@ -19,11 +19,20 @@ A missing tab layout for any windows manager / desktop environment
 
 - `Super-Shift-.` to ***open terminal application*** embeded in tabbed
 - `Super-Shift-/` to open new terminal window with the ***chosen terminal's path***
-- `Super-Shift-a` to ***attach window*** from current workplace. Require `wmctrl`, and should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+- `Super-Shift-a` to ***attach window*** from current workplace.
+    - Require `wmctrl`.
+    - Require windows manager / desktop environment with `EWMH` (Extended windows manager Hint)
+    - Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
 - `Super-Shift-s` to **attach window** by mouse selection.
-- `Super-Shift-equal` to ***automatically attach all windows*** from current workplace. Require `wmctrl`, and should use `-c` argument, i.e., `tabbed -c software -embedarg`.
-- `Super-Shift-d` to ***detach child window*** from current tabbed window. Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
-- `Super-Shift-minus` to ***automatically detach all child windows*** from current tabbed window. Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+    - Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+- `Super-Shift-equal` to ***automatically attach all windows*** from current workplace.
+    - Require `wmctrl`.
+    - Require windows manager / desktop environment with `EWMH` (Extended windows manager Hint)
+    - Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+- `Super-Shift-d` to ***detach child window*** from current tabbed window.
+    - Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
+- `Super-Shift-minus` to ***automatically detach all child windows*** from current tabbed window.
+    - Should use `-c` argument, i.e., `tabbed -c software -embedarg`.
 - `Super-Shift-[` to ***hide current tab*** in current tabbed window.
 - `Super-Shift-]` to ***show hidden tab*** in current tabbed window by dmenu prompt.
 - `Super-Shift-\` to ***show all hidden tabs*** in current tabbed window.

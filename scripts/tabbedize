@@ -1,6 +1,10 @@
 #!/bin/sh
 
-# Dependency: xprop, xdotool
+# Dependency: xwininfo, xdotool
+# Work without EWMH/NetWM
 
-# xprop -id "$(xdotool getactivewindow)" | grep -v 'WM_CLASS(STRING) = "tabbed"' && tabbed -c -d | xargs -I {} xdotool windowreparent $(xdotool getactivewindow) "{}"
-tabbed -c -d | xargs -I {} xdotool windowreparent $(xdotool getwindowfocus) "{}"
+rootid=$(printf '%d' "$(xwininfo -root | grep "Window id" | cut -d ' ' -f 4)")
+wid=$(xdotool getwindowfocus)
+wname=$(xwininfo -id "$wid" | grep 'Window id:' | cut -d ' ' -f 5-)
+[ "$wid" != "$rootid" ] && [ "$wname" != '(has no name)' ] && tabbed -c -d | xargs -I {} xdotool windowreparent "$wid" "{}"
+
