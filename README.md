@@ -73,6 +73,7 @@ sudo make install
 - [tabbed-keyrelease-20191216-b5f9ec6.diff](https://tools.suckless.org/tabbed/patches/keyrelease/)
 - [tabbed-0.6-xft.diff](https://tools.suckless.org/tabbed/patches/xft/)
 - [tabbed-hidetabs-20191216-b5f9ec6.diff](https://tools.suckless.org/tabbed/patches/hidetabs/)
+- [tabbed-icon-20200905-2da4e96.diff](https://tools.suckless.org/tabbed/patches/icon/) (modified by me, see `patches` folder)
 
 ## Scripts
 

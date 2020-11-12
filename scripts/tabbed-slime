@@ -2,4 +2,28 @@
 
 # Dependency: xwininfo, xdotool, dmenu
 
-xwininfo -children -id $(xdotool getactivewindow) | grep '     0x' | awk '{print $1, $2}' | tail -n +2 | dmenu -i -l 5 -p 'REPL window: ' | cut -b 1-9 | xargs printf '%d'
+# xwininfo -children -id $(xdotool getactivewindow) | grep '     0x' | awk '{print $1, $2}' | tail -n +2 | dmenu -i -l 5 -p 'REPL window: ' | cut -b 1-9 | xargs printf '%d'
+
+nl='
+'
+
+info=$(xwininfo -children -id $(xdotool getactivewindow))
+
+IFS="$nl"
+set -- $info
+unset IFS
+
+for line do
+    case $line in
+	'     0x'*)
+	    line=${line#${line%%[![:space:]]*}}
+	    safe="$safe${nl}${line%%:*}"
+	    ;;
+    esac
+done
+safe=${safe#*$nl}
+choice=$(printf '%s' "$safe" | dmenu -i -l 5 -p 'REPL window: ')
+case $choice in
+    '') ;;
+    *) printf '%d' ${choice%% *}
+esac

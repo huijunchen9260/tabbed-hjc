@@ -36,8 +36,8 @@ static Bool npisrelative  = True;
 /* Modify the following line to match your terminal and software list */
 #define OPENTERMSOFT(p) { \
 	.v = (char *[]){ "/bin/sh", "-c", \
-		"term='urxvt' && titlearg='-name' && embedarg='-embed' &&" \
-		"softlist=$(printf '%s\n' \"htop\" \"ncdu\" \"nvim\" \"fzf\" \"nnn\" \"ncmpcpp\" \"nmtui\" \"joplin\") &&" \
+		"term='alacritty' && titlearg='-t' && embedarg='--embed' &&" \
+		"softlist=$(printf '%s\n' \"htop\" \"ncdu\" \"nvim\" \"fzf\" \"nnn\" \"ncmpcpp\" \"nmtui\") &&" \
 		"printf '%s' \"$softlist\" |" \
 		"dmenu -i -p 'Softwares to run: ' |" \
 		"xargs -I {} $term $titlearg \"{}\" $embedarg $1 -e \"{}\"", \
@@ -49,7 +49,7 @@ static Bool npisrelative  = True;
 /* Modify the following line to match your terminal*/
 #define OPENTERM(p) { \
 	.v = (char *[]){ "/bin/sh", "-c", \
-		"term='urxvt' && embedarg='-embed' &&" \
+		"term='alacritty' && embedarg='--embed' &&" \
 		"cd \"$(xwininfo -children -id $1 | grep '^     0x' |" \
                 "sed -e's@^ *\\(0x[0-9a-f]*\\) \"\\([^\"]*\\)\".*@\\1 \\2@' |" \
 		"dmenu -i -l 10 -p 'New term path based on: ' |" \
@@ -227,7 +227,6 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_9,            move,        { .i = 8 } },
 	{ MODKEY|ShiftMask,    XK_0,            move,        { .i = 9 } },
 
-	/* { ControlMask,         XK_q,            killclient,  { 0 } }, */
 	{ MODKEY|ShiftMask,    XK_q,            killclient,  { 0 } },
 
 	{ MODKEY,              XK_u,            focusurgent, { 0 } },
@@ -236,6 +235,11 @@ static Key keys[] = {
 	{ 0,                   XK_F11,          fullscreen,  { 0 } },
 
 	{ MODKEY|ShiftMask,    XK_comma,        spawn,       SETPROP("_TABBED_SELECT_TAB") },
+
+	{ MODKEY,              XK_Shift_L,      showbar,     { .i = 1 } },
+	{ ShiftMask,           XK_Super_L,      showbar,     { .i = 1 } },
+	{ ControlMask,         XK_comma,        showbar,     { .i = 1 } },
+
 	/* Unique functionality */
 	{ MODKEY|ShiftMask,    XK_period,       spawn,       OPENTERMSOFT("_TABBED_SELECT_TERMAPP") },
 	{ MODKEY|ShiftMask,    XK_slash,        spawn,       OPENTERM("_TABBED_TERM") },
@@ -247,10 +251,6 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_bracketleft,  spawn,       HIDEWINDOW("_TABBED_HIDE_WINDOW") },
 	{ MODKEY|ShiftMask,    XK_bracketright, spawn,       SHOWHIDDEN("_TABBED_SHOW_HIDDEN") },
 	{ MODKEY|ShiftMask,    XK_backslash,    spawn,       SHOWHIDDENALL("_TABBED_SHOW_HIDDEN_ALL") },
-
-	{ MODKEY,              XK_Shift_L,      showbar,     { .i = 1 } },
-	{ ShiftMask,           XK_Super_L,      showbar,     { .i = 1 } },
-	{ ControlMask,         XK_comma,        showbar,     { .i = 1 } },
 };
 
 static Key keyreleases[] = {

@@ -1,0 +1,19 @@
+--- tabbed.c
++++ tabbed.c
+@@ -50,7 +51,7 @@
+ 
+ enum { ColFG, ColBG, ColLast };       /* color */
+ enum { WMProtocols, WMDelete, WMName, WMState, WMFullscreen,
+-       XEmbed, WMSelectTab, WMLast }; /* default atoms */
++       XEmbed, WMSelectTab, WMIcon, WMLast }; /* default atoms */
+ 
+ typedef union {
+ 	int i;
+@@ -171,6 +173,7 @@ static char winid[64];
+ static char **cmd;
+ static char *wmname = "tabbed";
+ static const char *geometry;
++static unsigned long icon[ICON_WIDTH * ICON_HEIGHT + 2];
+ 
+ char *argv0;
+ 
